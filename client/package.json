@@ -1,0 +1,53 @@
+{
+  "name": "learningreduxsaga",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Client.js",
+  "scripts": {
+    "watch": "webpack --watch --info-verbosity verbose --mode development",
+    "build": "webpack --mode development",
+    "build-pro": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "fibers": "^3.1.0",
+    "file-loader": "^4.2.0",
+    "image-webpack-loader": "^6.0.0",
+    "loader": "^2.1.1",
+    "node-sass": "^4.0.0",
+    "sass": "^1.23.0-module.beta.1",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.1.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.4.1",
+    "@material-ui/icons": "^4.4.1",
+    "@material-ui/styles": "^4.3.0",
+    "apexcharts": "^3.8.3",
+    "axios": "^0.19.0",
+    "classnames": "^2.2.6",
+    "font-awesome": "^4.7.0",
+    "mui-datatables": "^2.6.4",
+    "react": "^16.9.0",
+    "react-apexcharts": "^1.3.3",
+    "react-dom": "^16.9.0",
+    "react-google-maps": "^9.4.5",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.0.1",
+    "react-syntax-highlighter": "^11.0.2",
+    "react-toastify": "^5.3.2",
+    "recharts": "^1.6.2",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "tinycolor2": "^1.4.1"
+  }
+}
