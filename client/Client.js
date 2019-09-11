@@ -16,14 +16,13 @@ import { CssBaseline } from "@material-ui/core";
 
 import Themes from "./themes";
 import App from "./components/App";
-// import * as serviceWorker from "./serviceWorker";
 import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 
 ReactDOM.render(
   <LayoutProvider>
     <UserProvider>
-      <ThemeProvider theme={Themes.default}>
+      <ThemeProvider theme={Themes.custom}>
         <CssBaseline />
         <App />
       </ThemeProvider>

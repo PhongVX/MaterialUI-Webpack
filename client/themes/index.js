@@ -1,5 +1,5 @@
 import defaultTheme from "./default";
-
+import customTheme from './custom'
 import { createMuiTheme } from "@material-ui/core";
 
 const overrides = {
@@ -27,4 +27,5 @@ const overrides = {
 
 export default {
   default: createMuiTheme({ ...defaultTheme, ...overrides }),
+  custom: createMuiTheme({ ...customTheme, ...overrides })
 };
