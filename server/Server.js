@@ -22,6 +22,33 @@ const db = {
             "description":"",
             "status":2
         }
+    ],
+    "employees": [
+        {
+            "id":1,
+            "first_name":"Johnson",
+            "last_name":"James",
+            "age":13,
+            "sex":"Male",
+            "location":"Viet Nam"
+        },
+        {
+            "id":1,
+            "first_name":"Smith",
+            "last_name":"Michael",
+            "age":22,
+            "sex":"Male",
+            "location":"Viet Nam"
+        },
+        {
+            "id":1,
+            "first_name":"Hernandez",
+            "last_name":"Maria",
+            "age":25,
+            "sex":"FeMale",
+            "location":"Viet Nam"
+        }
+        
     ]
 }
 
@@ -37,4 +64,8 @@ app.get('/',function(req,res){
 
 app.get('/tasks', function(req,res){
     res.json(db["tasks"])
+})
+
+app.get('/employees', function(req,res){
+    res.json(db["employees"])
 })
