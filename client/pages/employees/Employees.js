@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { makeStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/styles'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -19,35 +19,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import * as employeeActions from '../../actions/employeeActions'
-
-// const useStyles = makeStyles({
-//     root: {
-//       width: '100%',
-//     },
-//     tableWrapper: {
-//       maxHeight: 407,
-//       overflow: 'auto',
-//     },
-// })
-
-// function createData(name, calories, fat, carbs, protein) {
-//     return { name, calories, fat, carbs, protein };
-// }
-
-// const useStyles = makeStyles(theme => ({
-//     button: {
-//       margin: theme.spacing(1),
-//     },
-//     leftIcon: {
-//       marginRight: theme.spacing(1),
-//     },
-//     rightIcon: {
-//       marginLeft: theme.spacing(1),
-//     },
-//     iconSmall: {
-//       fontSize: 20,
-//     },
-//   }));
+import employeesStyle from './Employees.style'
+import Box from '@material-ui/core/Box'
 
 class Employees extends Component {
     constructor(props) {
@@ -75,7 +48,14 @@ class Employees extends Component {
             ],
             rowsPerPage: 10,
             page: 0,
-            openModalEditing: false
+            openModalEditing: false,
+            lastName:"",
+            firstName:"",
+            age:"",
+            sex:"",
+            location:""
+          
+            
         }
         this.handleModalEditingOpenClose = this.handleModalEditingOpenClose.bind(this)
         this.handleEditingModalOk = this.handleEditingModalOk.bind(this)
@@ -115,56 +95,70 @@ class Employees extends Component {
     }
 
     handleModalEditingCancel(){
+        console.log(this.refs)
         this.setState({
             openModalEditing: !this.state.openModalEditing
         })
     }
 
+    handleDialogTextFieldChange=(e)=>{
+        let { target: { id, value } } = event
+        this.setState({[id]:value})
+        console.log(this.state)
+    }
+
     render() {
+        let {classes} = this.props
         let thiz = this
-        console.log(this.props.listEmployee)
-        // const classes = useStyles();
         return (
             <>
+           
              <Dialog open={this.state.openModalEditing}  aria-labelledby="form-dialog-title">
+
                 <DialogTitle id="form-dialog-title">Add New Employee</DialogTitle>
                 <DialogContent>
+
                     <TextField
-                        id="standard-multiline-flexible"
+                        id="lastName"
                         label="Last Name"
                         rowsMax="6"
-                        //value={""}
-                        //onChange={handleChange('multiline')}
-                        // className={classes.textField}
+                        fullWidth
+                        onChange={this.handleDialogTextFieldChange}
+                        className={classes.textField}
                         margin="normal"
                     />
                     <TextField
-                        id="standard-multiline-flexible"
+                        id="firstName"
                         label="First Name"
                         multiline
                         rowsMax="6"
-                        //value={""}
-                        //onChange={handleChange('multiline')}
-                        // className={classes.textField}
+                        fullWidth
+                        onChange={this.handleDialogTextFieldChange}
+                        margin="normal"
+                    />
+                    <TextField
+                        id="age"
+                        label="Age"
+                        fullWidth
+                        onChange={this.handleDialogTextFieldChange}
                         margin="normal"
                     />
                     <TextField
                         id="standard-multiline-flexible"
-                        label="Last Name"
-                        rowsMax="6"
-                        //value={""}
-                        //onChange={handleChange('multiline')}
-                        // className={classes.textField}
+                        label="Sex"
+                        multiline
+                        fullWidth
+                        onChange={this.handleDialogTextFieldChange}
                         margin="normal"
                     />
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="First Name"
+
+                     <TextField
+                        id="location"
+                        label="Location"
                         multiline
                         rowsMax="6"
-                        //value={""}
-                        //onChange={handleChange('multiline')}
-                        // className={classes.textField}
+                        fullWidth
+                        onChange={this.handleDialogTextFieldChange}
                         margin="normal"
                     />
                 </DialogContent>
@@ -179,7 +173,7 @@ class Employees extends Component {
             </Dialog>
 
             <Paper >
-             <Button onClick={this.handleModalEditingOpenClose} variant="contained" color="primary">
+            <Button  className={classes.buttonAdd} onClick={this.handleModalEditingOpenClose} variant="contained" color="primary">
                 Add New &nbsp;
                 <Icon >add</Icon>
             </Button>
@@ -254,4 +248,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Employees))
+export default  withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(employeesStyle)(Employees)))
