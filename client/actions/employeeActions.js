@@ -29,7 +29,7 @@ export const fetchListEmployeeRequest = ()=>{
     return dispatch =>{
         dispatch(fetchListEmployee())
         employeesApi
-        .getList()
+        .getListEmployee()
         .then(resp=>{
             const {data} = resp
             dispatch(fetchListEmployeeSuccess(data))
@@ -37,4 +37,30 @@ export const fetchListEmployeeRequest = ()=>{
             dispatch(fetchListEmployeeFailed(error))
         })
     }
+}
+
+export const createEmployeeRequest = (payload) =>{
+    return dispatch =>{
+        dispatch(fetchListEmployee())
+        employeesApi
+        .createEmployee(payload)
+        .then(resp=>{
+            dispatch(fetchListEmployeeRequest())
+        }).catch(error=>{
+            console.log(error)
+        })
+    } 
+}
+
+export const deleteEmployeeRequest = (id) =>{
+    return dispatch =>{
+        dispatch(fetchListEmployee())
+        employeesApi
+        .deleteEmployee({"id":id})
+        .then(resp=>{
+            dispatch(fetchListEmployeeRequest())
+        }).catch(error=>{
+            console.log(error)
+        })
+    } 
 }

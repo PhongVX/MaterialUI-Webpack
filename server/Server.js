@@ -1,6 +1,12 @@
 var express=require('express');
+var bodyParser = require('body-parser')
 var app=express();
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 const db = {
     "tasks":[
@@ -33,7 +39,7 @@ const db = {
             "location":"Viet Nam"
         },
         {
-            "id":1,
+            "id":2,
             "first_name":"Smith",
             "last_name":"Michael",
             "age":22,
@@ -41,7 +47,7 @@ const db = {
             "location":"Viet Nam"
         },
         {
-            "id":1,
+            "id":3,
             "first_name":"Hernandez",
             "last_name":"Maria",
             "age":25,
@@ -68,4 +74,20 @@ app.get('/tasks', function(req,res){
 
 app.get('/employees', function(req,res){
     res.json(db["employees"])
+})
+
+app.post('/employees', function(req,res){
+    db['employees'].push(req.body)
+    res.json({}), 201
+})
+
+app.post('/deleteEmployee', function(req,res){
+    let id = req.body.id
+    for (var i = 0; i < db['employees'].length; i++) {
+        var obj = db['employees'][i];
+        if(obj.id == id){
+            db['employees'].splice(i, 1);
+        }
+    } 
+    res.json({}), 200
 })

@@ -21,6 +21,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import * as employeeActions from '../../actions/employeeActions'
 import employeesStyle from './Employees.style'
 import Box from '@material-ui/core/Box'
+import DeleteButtonEmployee from './components/DeleteButtonEmployee'
 
 class Employees extends Component {
     constructor(props) {
@@ -44,6 +45,12 @@ class Employees extends Component {
                     minWidth: 120,
                     align: 'right',
                     format: value => value.toLocaleString(),
+                },
+                {
+                    id: 'action',
+                    label: 'Action',
+                    minWidth: 120,
+                    align: 'right'
                 }
             ],
             rowsPerPage: 10,
@@ -89,24 +96,39 @@ class Employees extends Component {
     }
 
     handleEditingModalOk(){
+        const { employeeActionCreators } = this.props
+        const { createEmployeeRequest } = employeeActionCreators
+        let payload={
+            "id": Math.floor(Math.random() * 10000),
+            "last_name":this.state.lastName,
+            "first_name":this.state.firstName,
+            "age":this.state.age,
+            "sex":this.state.sex,
+            "location":this.state.location
+        }
+        createEmployeeRequest(payload)
         this.setState({
             openModalEditing: !this.state.openModalEditing
         })
     }
 
     handleModalEditingCancel(){
-        console.log(this.refs)
         this.setState({
             openModalEditing: !this.state.openModalEditing
         })
     }
 
     handleDialogTextFieldChange=(e)=>{
-        let { target: { id, value } } = event
+        let { target: { id, value } } = e
         this.setState({[id]:value})
         console.log(this.state)
     }
 
+    handleDeleteEmployee=(id)=>{
+        const { employeeActionCreators } = this.props
+        const { deleteEmployeeRequest } = employeeActionCreators
+        deleteEmployeeRequest(id)
+    }
     render() {
         let {classes} = this.props
         let thiz = this
@@ -144,7 +166,7 @@ class Employees extends Component {
                         margin="normal"
                     />
                     <TextField
-                        id="standard-multiline-flexible"
+                        id="sex"
                         label="Sex"
                         multiline
                         fullWidth
@@ -194,18 +216,21 @@ class Employees extends Component {
                         </TableHead>
                         <TableBody>
                             {this.props.listEmployee.slice(thiz.state.page * thiz.state.rowsPerPage, thiz.state.page * thiz.state.rowsPerPage + thiz.state.rowsPerPage).map(row => {
-                                return (
+                               return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                         {this.state.columns.map(column => {
                                             const value = row[column.id];
                                             return (
                                                 <>
-                                                    <TableCell key={column.id} align={column.align}>
+                                                    <TableCell  id={row.id} key={column.id} align={column.align}>
                                                         {column.format && typeof value === 'number' ? column.format(value) : value}
                                                     </TableCell>                                                    
                                                 </>
                                             );
                                         })}
+                                        <TableCell >
+                                            <DeleteButtonEmployee handleDeleteEmployee={this.handleDeleteEmployee} id={row.id}/>
+                                        </TableCell>   
                                     </TableRow>
                                 );
                             })}
