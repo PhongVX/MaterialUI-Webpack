@@ -57,7 +57,7 @@ function Login(props) {
           {activeTabId === 0 && (
             <React.Fragment>
               <Typography variant="h1" className={classes.greeting}>
-                Good Morning, User
+                Courier
               </Typography>
               <Button size="large" className={classes.googleButton}>
                 <img src={google} alt="google" className={classes.googleIcon} />
@@ -245,7 +245,7 @@ function Login(props) {
           )}
         </div>
         <Typography color="primary" className={classes.copyright}>
-          © 2014-2019 Flatlogic, LLC. All rights reserved.
+          © ... All rights reserved.
         </Typography>
       </div>
     </Grid>

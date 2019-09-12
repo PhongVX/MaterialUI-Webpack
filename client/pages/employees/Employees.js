@@ -16,12 +16,11 @@ import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import * as employeeActions from '../../actions/employeeActions'
 import employeesStyle from './Employees.style'
-import Box from '@material-ui/core/Box'
-import DeleteButtonEmployee from './components/DeleteButtonEmployee'
+import TableCellDeleteButton from '../../components/TableCellDeleteButton'
+
 
 class Employees extends Component {
     constructor(props) {
@@ -29,40 +28,37 @@ class Employees extends Component {
         this.state = {
             rows: [],
             columns: [
-                { id: 'last_name', label: 'Last Name', minWidth: 200 },
-                { id: 'first_name', label: 'First Name', minWidth: 200 },
-                { id: 'age', label: 'Age', minWidth: 100 },
+                { id: 'last_name', label: 'Last Name' },
+                { id: 'first_name', label: 'First Name' },
+                { id: 'age', label: 'Age' },
                 {
                     id: 'sex',
                     label: 'Sex',
-                    minWidth: 120,
                     align: 'right',
                     format: value => value.toLocaleString(),
                 },
                 {
                     id: 'location',
                     label: 'Location',
-                    minWidth: 120,
                     align: 'right',
                     format: value => value.toLocaleString(),
                 },
                 {
                     id: 'action',
                     label: 'Action',
-                    minWidth: 120,
                     align: 'right'
                 }
             ],
             rowsPerPage: 10,
             page: 0,
             openModalEditing: false,
-            lastName:"",
-            firstName:"",
-            age:"",
-            sex:"",
-            location:""
-          
-            
+            lastName: "",
+            firstName: "",
+            age: "",
+            sex: "",
+            location: ""
+
+
         }
         this.handleModalEditingOpenClose = this.handleModalEditingOpenClose.bind(this)
         this.handleEditingModalOk = this.handleEditingModalOk.bind(this)
@@ -89,22 +85,22 @@ class Employees extends Component {
         })
     }
 
-    handleModalEditingOpenClose(){
+    handleModalEditingOpenClose() {
         this.setState({
             openModalEditing: !this.state.openModalEditing
         })
     }
 
-    handleEditingModalOk(){
+    handleEditingModalOk() {
         const { employeeActionCreators } = this.props
         const { createEmployeeRequest } = employeeActionCreators
-        let payload={
+        let payload = {
             "id": Math.floor(Math.random() * 10000),
-            "last_name":this.state.lastName,
-            "first_name":this.state.firstName,
-            "age":this.state.age,
-            "sex":this.state.sex,
-            "location":this.state.location
+            "last_name": this.state.lastName,
+            "first_name": this.state.firstName,
+            "age": this.state.age,
+            "sex": this.state.sex,
+            "location": this.state.location
         }
         createEmployeeRequest(payload)
         this.setState({
@@ -112,147 +108,150 @@ class Employees extends Component {
         })
     }
 
-    handleModalEditingCancel(){
+    handleModalEditingCancel() {
         this.setState({
             openModalEditing: !this.state.openModalEditing
         })
     }
 
-    handleDialogTextFieldChange=(e)=>{
+    handleDialogTextFieldChange = (e) => {
         let { target: { id, value } } = e
-        this.setState({[id]:value})
+        this.setState({ [id]: value })
         console.log(this.state)
     }
 
-    handleDeleteEmployee=(id)=>{
+    handleDeleteEmployee = (id) => {
         const { employeeActionCreators } = this.props
         const { deleteEmployeeRequest } = employeeActionCreators
         deleteEmployeeRequest(id)
     }
+
     render() {
-        let {classes} = this.props
+        let { classes } = this.props
         let thiz = this
         return (
             <>
-           
-             <Dialog open={this.state.openModalEditing}  aria-labelledby="form-dialog-title">
 
-                <DialogTitle id="form-dialog-title">Add New Employee</DialogTitle>
-                <DialogContent>
+                <Dialog open={this.state.openModalEditing} aria-labelledby="form-dialog-title">
 
-                    <TextField
-                        id="lastName"
-                        label="Last Name"
-                        rowsMax="6"
-                        fullWidth
-                        onChange={this.handleDialogTextFieldChange}
-                        className={classes.textField}
-                        margin="normal"
-                    />
-                    <TextField
-                        id="firstName"
-                        label="First Name"
-                        multiline
-                        rowsMax="6"
-                        fullWidth
-                        onChange={this.handleDialogTextFieldChange}
-                        margin="normal"
-                    />
-                    <TextField
-                        id="age"
-                        label="Age"
-                        fullWidth
-                        onChange={this.handleDialogTextFieldChange}
-                        margin="normal"
-                    />
-                    <TextField
-                        id="sex"
-                        label="Sex"
-                        multiline
-                        fullWidth
-                        onChange={this.handleDialogTextFieldChange}
-                        margin="normal"
-                    />
+                    <DialogTitle id="form-dialog-title">Add New Employee</DialogTitle>
+                    <DialogContent>
 
-                     <TextField
-                        id="location"
-                        label="Location"
-                        multiline
-                        rowsMax="6"
-                        fullWidth
-                        onChange={this.handleDialogTextFieldChange}
-                        margin="normal"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.handleModalEditingCancel} color="primary">
-                        Cancel
+                        <TextField
+                            id="lastName"
+                            label="Last Name"
+                            rowsMax="6"
+                            fullWidth
+                            onChange={this.handleDialogTextFieldChange}
+                            className={classes.textField}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="firstName"
+                            label="First Name"
+                            multiline
+                            rowsMax="6"
+                            fullWidth
+                            onChange={this.handleDialogTextFieldChange}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="age"
+                            label="Age"
+                            fullWidth
+                            onChange={this.handleDialogTextFieldChange}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="sex"
+                            label="Sex"
+                            multiline
+                            fullWidth
+                            onChange={this.handleDialogTextFieldChange}
+                            margin="normal"
+                        />
+
+                        <TextField
+                            id="location"
+                            label="Location"
+                            multiline
+                            rowsMax="6"
+                            fullWidth
+                            onChange={this.handleDialogTextFieldChange}
+                            margin="normal"
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button  onClick={this.handleModalEditingCancel} variant="outlined" color="secondary">
+                            Cancel
             </Button>
-                    <Button onClick={this.handleEditingModalOk}  color="primary">
-                        Ok
+                        <Button onClick={this.handleEditingModalOk} variant="outlined" color="primary">
+                            Ok
             </Button>
-                </DialogActions>
-            </Dialog>
+                    </DialogActions>
+                </Dialog>
 
-            <Paper >
-            <Button  className={classes.buttonAdd} onClick={this.handleModalEditingOpenClose} variant="contained" color="primary">
-                Add New &nbsp;
+                <Paper className={classes.root}>
+                    <Button className={classes.buttonAdd} onClick={this.handleModalEditingOpenClose} variant="contained" color="primary">
+                        Add New &nbsp;
                 <Icon >add</Icon>
-            </Button>
-                <div>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                {this.state.columns.map(column => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {this.props.listEmployee.slice(thiz.state.page * thiz.state.rowsPerPage, thiz.state.page * thiz.state.rowsPerPage + thiz.state.rowsPerPage).map(row => {
-                               return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {this.state.columns.map(column => {
-                                            const value = row[column.id];
-                                            return (
-                                                <>
-                                                    <TableCell  id={row.id} key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>                                                    
-                                                </>
-                                            );
-                                        })}
-                                        <TableCell >
-                                            <DeleteButtonEmployee handleDeleteEmployee={this.handleDeleteEmployee} id={row.id}/>
-                                        </TableCell>   
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </div>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={this.state.rows.length}
-                    rowsPerPage={this.state.rowsPerPage}
-                    page={this.state.page}
-                    backIconButtonProps={{
-                        'aria-label': 'previous page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'next page',
-                    }}
-                    onChangePage={this.handleChangePage.bind(this)}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
-                />
-            </Paper>
+                    </Button>
+                    <div>
+                        <Table className={classes.table} >
+                            <TableHead>
+                                <TableRow>
+                                    {this.state.columns.map(column => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {this.props.listEmployee.slice(thiz.state.page * thiz.state.rowsPerPage, thiz.state.page * thiz.state.rowsPerPage + thiz.state.rowsPerPage).map(row => {
+                                    return (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            {this.state.columns.map(column => {
+                                                const value = row[column.id];
+                                                if (value !== undefined) {
+                                                    return (
+                                                        <>
+                                                            <TableCell id={row.id} key={column.id} align={column.align}>
+                                                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                            </TableCell>
+                                                        </>
+                                                    );
+                                                }
+                                            })}
+                                            <TableCell align="right">
+                                                 <TableCellDeleteButton handleDelete={this.handleDeleteEmployee} id={row.id}/>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={this.state.rows.length}
+                        rowsPerPage={this.state.rowsPerPage}
+                        page={this.state.page}
+                        backIconButtonProps={{
+                            'aria-label': 'previous page',
+                        }}
+                        nextIconButtonProps={{
+                            'aria-label': 'next page',
+                        }}
+                        onChangePage={this.handleChangePage.bind(this)}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
+                    />
+                </Paper>
             </>
         )
     }
@@ -273,4 +272,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default  withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(employeesStyle)(Employees)))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(employeesStyle)(Employees)))
