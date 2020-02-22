@@ -1,7 +1,7 @@
-import React from "react";
+import React, {Component } from "react";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import {Provider} from 'react-redux'
-
+import PropTypes from 'prop-types'
 // components
 import Layout from "./Layout";
 
@@ -13,15 +13,37 @@ import Login from "../pages/login";
 import { useUserState } from "../context/UserContext";
 
 import configureStore from '../store/configureStore'
-
+import Products from '../pages/products/Products'
+import StoreContext from '../context/StoreContext'
 const store = configureStore()
+
+
+class StoreProvider extends Component{ 
+  getChildContext(){
+    return {
+      store: this.props.store
+    }
+  }
+  render(){
+    return this.props.children
+  }
+}
+
+StoreProvider.childContextTypes = { 
+  store: PropTypes.object
+}
 
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
-
+  console.log(store)
   return (
     <Provider store={store}>
+      <StoreProvider store={store}>
+        <Products/>
+      </StoreProvider>
+    
+      
     <HashRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
@@ -35,6 +57,7 @@ export default function App() {
         <Route component={Error} />
       </Switch>
     </HashRouter>
+
     </Provider>
   );
 
