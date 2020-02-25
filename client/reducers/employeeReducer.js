@@ -1,22 +1,32 @@
 import * as employeesConstants from '../constants/employeeConstants'
 
 const initialState = {
-    listEmployee:[]
+    listEmployee:{ 
+
+    }
 }
 
 const employeesReducer = (state = initialState, action)=>{
     switch(action.type){
         case employeesConstants.FETCH_EMPLOYEES:{
+            const {componentId} = action.payload
             return {
                 ...state,
-                listEmployee:[]
+                listEmployee: {
+                    ...state.listEmployee,
+                    [componentId]:[]
+                
+                }
             }
         }
         case employeesConstants.FETCH_EMPLOYEES_SUCCESS:{
-            const {data} = action.payload
+            const {data, componentId} = action.payload
             return {
                 ...state,
-                listEmployee: data
+                listEmployee: {
+                    ...state.listEmployee,
+                    [componentId]:data
+                }
             }
         }
         case employeesConstants.FETCH_EMPLOYEES_FAILED:{

@@ -39,9 +39,9 @@ export default function App() {
   console.log(store)
   return (
     <Provider store={store}>
-      <StoreProvider store={store}>
+      {/* <StoreProvider store={store}>
         <Products/>
-      </StoreProvider>
+      </StoreProvider> */}
     
       
     <HashRouter>

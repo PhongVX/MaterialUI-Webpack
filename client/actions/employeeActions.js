@@ -1,64 +1,69 @@
 import * as employeesApi from '../apis/employeeApi'
 import * as employeesConstants from '../constants/employeeConstants'
 
-export const fetchListEmployee = ()=>{
+export const fetchListEmployee = (componentId)=>{
     return{
-        type: employeesConstants.FETCH_EMPLOYEES
+        type: employeesConstants.FETCH_EMPLOYEES,
+        payload:{
+            componentId
+        }
     }
 }
 
-export const fetchListEmployeeSuccess = (data)=>{
+export const fetchListEmployeeSuccess = (componentId, data)=>{
     return{
         type: employeesConstants.FETCH_EMPLOYEES_SUCCESS,
         payload:{
+            componentId,
             data
         }
     }
 }
 
-export const fetchListEmployeeFailed = (error)=>{
+export const fetchListEmployeeFailed = (componentId, error)=>{
     return{
         type: employeesConstants.FETCH_EMPLOYEES_FAILED,
         payload:{
+            componentId,
             error
         }
     }
 }
 
-export const fetchListEmployeeRequest = ()=>{
+export const fetchListEmployeeRequest = (componentId)=>{
     return dispatch =>{
         dispatch(fetchListEmployee())
         employeesApi
         .getListEmployee()
         .then(resp=>{
             const {data} = resp
-            dispatch(fetchListEmployeeSuccess(data))
+            dispatch(fetchListEmployeeSuccess(componentId, data))
         }).catch(error=>{
-            dispatch(fetchListEmployeeFailed(error))
+            dispatch(fetchListEmployeeFailed(componentId, error))
         })
     }
 }
 
-export const createEmployeeRequest = (payload) =>{
+export const createEmployeeRequest = (componentId, payload) =>{
     return dispatch =>{
         dispatch(fetchListEmployee())
         employeesApi
         .createEmployee(payload)
         .then(resp=>{
-            dispatch(fetchListEmployeeRequest())
+            dispatch(fetchListEmployeeRequest(componentId))
         }).catch(error=>{
             console.log(error)
         })
     } 
 }
 
-export const deleteEmployeeRequest = (id) =>{
+export const deleteEmployeeRequest = (componentId, id) =>{
     return dispatch =>{
         dispatch(fetchListEmployee())
         employeesApi
         .deleteEmployee({"id":id})
         .then(resp=>{
-            dispatch(fetchListEmployeeRequest())
+            dispatch(fetchListEmployeeRequest(componentId))
         }).catch(error=>{
             console.log(error)
         })

@@ -66,8 +66,8 @@ class Employees extends Component {
     }
 
     componentDidMount() {
-        const { employeeActionCreators } = this.props
-        const { fetchListEmployeeRequest } = employeeActionCreators
+        console.log('Component ĐiMount')
+        const { fetchListEmployeeRequest } = this.props
         fetchListEmployeeRequest()
     }
 
@@ -92,8 +92,7 @@ class Employees extends Component {
     }
 
     handleEditingModalOk() {
-        const { employeeActionCreators } = this.props
-        const { createEmployeeRequest } = employeeActionCreators
+        const { createEmployeeRequest } = this.props
         let payload = {
             "id": Math.floor(Math.random() * 10000),
             "last_name": this.state.lastName,
@@ -121,8 +120,7 @@ class Employees extends Component {
     }
 
     handleDeleteEmployee = (id) => {
-        const { employeeActionCreators } = this.props
-        const { deleteEmployeeRequest } = employeeActionCreators
+        const { deleteEmployeeRequest } = this.props
         deleteEmployeeRequest(id)
     }
 
@@ -131,7 +129,7 @@ class Employees extends Component {
         let thiz = this
         return (
             <>
-
+                <input type="text"/>
                 <Dialog open={this.state.openModalEditing} aria-labelledby="form-dialog-title">
 
                     <DialogTitle id="form-dialog-title">Add New Employee</DialogTitle>
@@ -259,17 +257,22 @@ class Employees extends Component {
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+    let listEmployee = !!state.employees.listEmployee[ownProps.componentId]?state.employees.listEmployee[ownProps.componentId]:[]
+    console.log(listEmployee)
     return {
-        listEmployee: state.employees.listEmployee
+        listEmployee: listEmployee
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch,  ownProps) => {
+    console.log(ownProps)
     return {
-        employeeActionCreators: bindActionCreators(employeeActions, dispatch)
+        deleteEmployeeRequest: (id) => dispatch(employeeActions.deleteEmployeeRequest(ownProps.componentId, id)),
+        createEmployeeRequest:(payload)=>dispatch(employeeActions.createEmployeeRequest(ownProps.componentId, payload)), 
+        fetchListEmployeeRequest:()=>dispatch(employeeActions.fetchListEmployeeRequest(ownProps.componentId))
     }
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(employeesStyle)(Employees)))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(employeesStyle)(Employees))
