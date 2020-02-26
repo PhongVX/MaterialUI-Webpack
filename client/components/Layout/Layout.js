@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import {
   Route,
   Switch,
@@ -15,18 +15,25 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 
 // pages
-import Dashboard from "../../pages/dashboard";
+
 // import Typography from "../../pages/typography";
 // import Notifications from "../../pages/notifications";
 // import Maps from "../../pages/maps";
 // import Tables from "../../pages/tables";
 // import Icons from "../../pages/icons";
 // import Charts from "../../pages/charts";
-import Employees from "../../pages/employees"
-import Products from "../../pages/products"
+
+// import Dashboard from "../../pages/dashboard";
+// import Employees from "../../pages/employees"
+// import Products from "../../pages/products"
+
+const Dashboard = lazy(() => import('../../pages/dashboard'));
+const Employees = lazy(() => import('../../pages/employees'));
+const Products = lazy(() => import('../../pages/products'));
 
 // context
 import { useLayoutState } from "../../context/LayoutContext";
+
 
 function Layout(props) {
   var classes = useStyles();
@@ -36,15 +43,16 @@ function Layout(props) {
 
   return (
     <div className={classes.root}>
-        <>
-          <Header history={props.history} />
-          <Sidebar />
-          <div
-            className={classnames(classes.content, {
-              [classes.contentShift]: layoutState.isSidebarOpened,
-            })}
-          >
-            <div className={classes.fakeToolbar} />
+      <>
+        <Header history={props.history} />
+        <Sidebar />
+        <div
+          className={classnames(classes.content, {
+            [classes.contentShift]: layoutState.isSidebarOpened,
+          })}
+        >
+          <div className={classes.fakeToolbar} />
+          <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path="/app/dashboard" component={Dashboard} />
               <Route path="/app/employees" component={Employees} />
@@ -61,8 +69,9 @@ function Layout(props) {
               <Route path="/app/ui/icons" component={Icons} />
               <Route path="/app/ui/charts" component={Charts} /> */}
             </Switch>
-          </div>
-        </>
+          </Suspense>
+        </div>
+      </>
     </div>
   );
 }

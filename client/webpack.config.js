@@ -17,6 +17,7 @@ module.exports = {
   },
   output: {
     path: OUTPUT_PATH,
+    publicPath: "/reactClient/",
     filename: "[name].js"
   },
   module: {
