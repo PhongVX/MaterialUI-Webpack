@@ -29,10 +29,11 @@ export const deleteTabPane = (componentId, targetKey)=>{
     }
 }
 
-export const updateTabPaneActiveKey = (activeKey)=>{
+export const updateTabPaneActiveKey = (componentId, activeKey)=>{
     return{
         type: tabPaneConstants.UPDATE_TAB_PANE_ACTIVE_KEY,
         payload:{
+            componentId,
             activeKey
         }
     }

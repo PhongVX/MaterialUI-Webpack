@@ -3,14 +3,9 @@ import { connect } from 'react-redux'
         
 import Employees from '../employees/Employees'
 
-function randomId() {
-    // Math.random should be unique because of its seeding algorithm.
-    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-    // after the decimal.
-    return '_' + Math.random().toString(36).substr(2, 9);
-};
-
 import { Tabs, Button } from 'antd';
+
+import {randomId} from '../../commons/utils'
 import  * as tabPanelAction from '../../actions/tabPanelAction'
 
 import 'antd/dist/antd.css';
@@ -50,7 +45,7 @@ class Products extends Component {
   }
 
   render() {
-    let {activeKey} = this.props
+    let {activeTabPaneKey} = this.props
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
@@ -59,7 +54,7 @@ class Products extends Component {
         <Tabs
           hideAdd
           onChange={this.onChange}
-          activeKey={activeKey}
+          activeKey={activeTabPaneKey}
           type="editable-card"
           onEdit={this.onEdit}
         >
@@ -76,10 +71,10 @@ class Products extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  let listTabPane = !!state.tabPane.listTabPane[componentName]?state.tabPane.listTabPane[componentName]:[]
+  let listTabPane = !!state.tabPane.listTabPane[componentName]?state.tabPane.listTabPane[componentName].list:[]
   return {
       listTabPane:listTabPane,
-      activeKey: state.tabPane.activeKey
+      activeTabPaneKey: !!state.tabPane.listTabPane[componentName]? state.tabPane.listTabPane[componentName].activeKey: ''
   }
 }
 
@@ -87,7 +82,7 @@ const mapDispatchToProps = (dispatch,  ownProps) => {
   return {
       createTabPane:(payload)=>dispatch(tabPanelAction.createTabPane(componentName, payload)), 
       deleteTabPane: (targetKey) => dispatch(tabPanelAction.deleteTabPane(componentName, targetKey)),
-      updateTabPaneActiveKey:(activeKey)=>dispatch(tabPanelAction.updateTabPaneActiveKey(activeKey))
+      updateTabPaneActiveKey:(activeKey)=>dispatch(tabPanelAction.updateTabPaneActiveKey(componentName, activeKey))
   }
 }
 

@@ -21,6 +21,14 @@ import * as employeeActions from '../../actions/employeeActions'
 import employeesStyle from './Employees.style'
 import TableCellDeleteButton from '../../components/TableCellDeleteButton'
 
+import { Tabs } from 'antd';
+import {randomId} from '../../commons/utils'
+import  * as tabPanelAction from '../../actions/tabPanelAction'
+
+import 'antd/dist/antd.css';
+const { TabPane } = Tabs;
+
+const componentName = 'employee'
 
 class Employees extends Component {
     constructor(props) {
@@ -66,7 +74,6 @@ class Employees extends Component {
     }
 
     componentDidMount() {
-        console.log('Component ĐiMount')
         const { fetchListEmployeeRequest } = this.props
         fetchListEmployeeRequest()
     }
@@ -124,8 +131,32 @@ class Employees extends Component {
         deleteEmployeeRequest(id)
     }
 
+
+
+
+    
+    onChangeTabPane = activeKey => {
+        let {updateTabPaneActiveKey} = this.props
+        updateTabPaneActiveKey(activeKey)
+    };
+
+    onEditTabPane = (targetKey, action) => {
+        this[action](targetKey);
+    };
+
+    remove = targetKey => {
+        let {deleteTabPane} = this.props;
+        deleteTabPane(targetKey)
+    };
+
+    addTabPane = ()=>{ 
+        let id = randomId()
+        let {createTabPane} = this.props
+        createTabPane({ title: `Input${id}`, content:  <input key={id} />, key: id })
+    }
+
     render() {
-        let { classes } = this.props
+        let { classes, activeTabPaneKey, listTabPane } = this.props
         let thiz = this
         return (
             <>
@@ -190,9 +221,29 @@ class Employees extends Component {
                 </Dialog>
 
                 <Paper className={classes.root}>
+                    
+                <div>
+                    <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.addTabPane}>Add New Input Tab</Button>
+                    </div>
+                    <Tabs
+                    hideAdd
+                    onChange={this.onChangeTabPane}
+                    activeKey={activeTabPaneKey}
+                    type="editable-card"
+                    onEdit={this.onEditTabPane}
+                    >
+                    {listTabPane.map(pane => (
+                        <TabPane tab={pane.title} key={pane.key}>
+                        {pane.content}
+                        </TabPane>
+                    ))}
+                    </Tabs>
+                </div>
+
                     <Button className={classes.buttonAdd} onClick={this.handleModalEditingOpenClose} variant="contained" color="primary">
                         Add New &nbsp;
-                <Icon >add</Icon>
+                    <Icon >add</Icon>
                     </Button>
                     <div>
                         <Table className={classes.table} >
@@ -259,18 +310,22 @@ class Employees extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     let listEmployee = !!state.employees.listEmployee[ownProps.componentId]?state.employees.listEmployee[ownProps.componentId]:[]
-    console.log(listEmployee)
+    let listTabPane = !!state.tabPane.listTabPane[`${componentName}_${ownProps.componentId}`]?state.tabPane.listTabPane[`${componentName}_${ownProps.componentId}`].list:[]
     return {
-        listEmployee: listEmployee
+        listEmployee: listEmployee,
+        listTabPane:listTabPane,
+        activeTabPaneKey: state.tabPane.listTabPane[`${componentName}_${ownProps.componentId}`]? state.tabPane.listTabPane[`${componentName}_${ownProps.componentId}`].activeKey:''
     }
 }
 
 const mapDispatchToProps = (dispatch,  ownProps) => {
-    console.log(ownProps)
     return {
         deleteEmployeeRequest: (id) => dispatch(employeeActions.deleteEmployeeRequest(ownProps.componentId, id)),
         createEmployeeRequest:(payload)=>dispatch(employeeActions.createEmployeeRequest(ownProps.componentId, payload)), 
-        fetchListEmployeeRequest:()=>dispatch(employeeActions.fetchListEmployeeRequest(ownProps.componentId))
+        fetchListEmployeeRequest:()=>dispatch(employeeActions.fetchListEmployeeRequest(ownProps.componentId)),
+        createTabPane:(payload)=>dispatch(tabPanelAction.createTabPane(`${componentName}_${ownProps.componentId}`, payload)), 
+        deleteTabPane: (targetKey) => dispatch(tabPanelAction.deleteTabPane(`${componentName}_${ownProps.componentId}`, targetKey)),
+        updateTabPaneActiveKey:(activeKey)=>dispatch(tabPanelAction.updateTabPaneActiveKey(`${componentName}_${ownProps.componentId}`, activeKey))
     }
 }
 

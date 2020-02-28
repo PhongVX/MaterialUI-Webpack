@@ -15,27 +15,29 @@ const tabPaneReducer = (state = initialState, action)=>{
         }
         case tabPaneConstants.CREATE_TAB_PANE:{
             const {componentId, data} = action.payload
-            let oldListPane = !!state.listTabPane[componentId]?state.listTabPane[componentId]:[]
+            let oldListPane = !!state.listTabPane[componentId]?state.listTabPane[componentId].list:[]
             return {
                 ...state,
                 listTabPane: {
                     ...state.listTabPane,
-                    [componentId]:[...oldListPane, data]
-                },
-                activeKey:data.key
+                    [componentId]:{
+                        activeKey:data.key,
+                        list:[...oldListPane, data]
+                    }
+                }
             }
         }
         case tabPaneConstants.DELETE_TAB_PANE:{
             const {componentId, targetKey} = action.payload
             let lastIndex;
-            let activeKey = state.activeKey
-            state.listTabPane[componentId].forEach((pane, i) => {
+            let activeKey = state.listTabPane[componentId].activeKey
+            state.listTabPane[componentId].list.forEach((pane, i) => {
               if (pane.key === targetKey) {
                 lastIndex = i - 1;
               }
             });
 
-            const tabs = state.listTabPane[componentId].filter(pane => pane.key !== targetKey);
+            const tabs = state.listTabPane[componentId].list.filter(pane => pane.key !== targetKey);
             if (tabs.length && activeKey === targetKey) {
               if (lastIndex >= 0) {
                 activeKey = tabs[lastIndex].key;
@@ -43,14 +45,15 @@ const tabPaneReducer = (state = initialState, action)=>{
                 activeKey = tabs[0].key;
               }
             }
-            debugger
             return {
                 ...state,
                 listTabPane: {
                     ...state.listTabPane,
-                    [componentId]:tabs
-                },
-                activeKey:activeKey
+                    [componentId]:{ 
+                        activeKey: activeKey,
+                        list: tabs
+                    }
+                }
             }
         }
         case tabPaneConstants.CLEAR_TAB_PANE:{
@@ -64,10 +67,16 @@ const tabPaneReducer = (state = initialState, action)=>{
             }
         }
         case tabPaneConstants.UPDATE_TAB_PANE_ACTIVE_KEY:{
-            const {activeKey} = action.payload
+            const {componentId, activeKey} = action.payload
             return {
                 ...state,
-                activeKey
+                listTabPane: {
+                    ...state.listTabPane,
+                    [componentId]:{
+                        activeKey:activeKey,
+                        list:state.listTabPane[componentId].list
+                    }
+                }
             }
         }
         default:
