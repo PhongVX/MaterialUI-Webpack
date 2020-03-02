@@ -36,14 +36,8 @@ StoreProvider.childContextTypes = {
 export default function App() {
   // global
   var { isAuthenticated } = useUserState();
-  console.log(store)
   return (
     <Provider store={store}>
-      {/* <StoreProvider store={store}>
-        <Products/>
-      </StoreProvider> */}
-    
-      
     <HashRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />

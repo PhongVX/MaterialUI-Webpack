@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, lazy } from "react";
+import { connect } from 'react-redux'
+
 import {
   Collapse,
   Divider,
@@ -18,7 +20,20 @@ import useStyles from "./styles";
 // components
 import Dot from "../Dot";
 
-export default function SidebarLink({
+// context
+import {
+  updateActiveMenu,
+  useLayoutDispatch
+} from "../../../../context/LayoutContext";
+
+import * as tabPanelAction from '../../../../actions/tabPanelAction'
+import {randomId} from '../../../../commons/utils'
+import {TABS} from '../../../../constants/tabConstants'
+
+
+const Employees = lazy(() => import('../../../../pages/employees'));
+
+function SidebarLink({
   link,
   icon,
   label,
@@ -27,14 +42,18 @@ export default function SidebarLink({
   isSidebarOpened,
   nested,
   type,
+  id,
+  activeMenu,
+  createTabPane
 }) {
   var classes = useStyles();
 
   // local
   var [isOpen, setIsOpen] = useState(false);
-  var isLinkActive =
-    link &&
-    (location.pathname === link || location.pathname.indexOf(link) !== -1);
+  var layoutDispatch = useLayoutDispatch();
+
+  var isLinkActive = id === activeMenu
+
 
   if (type === "title")
     return (
@@ -52,9 +71,13 @@ export default function SidebarLink({
   if (!children)
     return (
       <ListItem
+        onClick={()=>{
+
+          updateActiveMenu(layoutDispatch, id)
+          let tabId = randomId()
+          createTabPane({ title: `${label}${tabId}`, content:  <Employees key={tabId} componentId={tabId}/>, key: tabId })
+        }}
         button
-        component={link && Link}
-        to={link}
         className={classes.link}
         classes={{
           root: classnames(classes.linkRoot, {
@@ -143,3 +166,19 @@ export default function SidebarLink({
     }
   }
 }
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+  }
+}
+
+const mapDispatchToProps = (dispatch,  ownProps) => {
+  return {
+      createTabPane:(payload)=>dispatch(tabPanelAction.createTabPane(TABS.mainTab, payload))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarLink)
+

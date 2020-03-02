@@ -7,6 +7,8 @@ function layoutReducer(state, action) {
   switch (action.type) {
     case "TOGGLE_SIDEBAR":
       return { ...state, isSidebarOpened: !state.isSidebarOpened };
+    case "UPDATE_ACTIVE_MENU":
+        return { ...state, activeMenu: action.activeMenu };
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -16,6 +18,7 @@ function layoutReducer(state, action) {
 function LayoutProvider({ children }) {
   var [state, dispatch] = React.useReducer(layoutReducer, {
     isSidebarOpened: false,
+    activeMenu:0
   });
   return (
     <LayoutStateContext.Provider value={state}>
@@ -42,11 +45,18 @@ function useLayoutDispatch() {
   return context;
 }
 
-export { LayoutProvider, useLayoutState, useLayoutDispatch, toggleSidebar };
+export { LayoutProvider, useLayoutState, useLayoutDispatch, toggleSidebar, updateActiveMenu };
 
 // ###########################################################
 function toggleSidebar(dispatch) {
   dispatch({
     type: "TOGGLE_SIDEBAR",
+  });
+}
+
+function updateActiveMenu(dispatch, activeMenu) {
+  dispatch({
+    type: "UPDATE_ACTIVE_MENU",
+    activeMenu: activeMenu
   });
 }
